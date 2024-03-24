@@ -14,7 +14,7 @@ const rateLimiter = require('express-rate-limit')
 const connectDB = require('./db/connection')
 
 // routers
-
+const catRouter = require('./routes/catRoutes')
 
 // middleware
 const notFoundMiddleware = require('./middleware/not-found')
@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
     res.send('Hello World')
 })
 
-
+app.use('/api/v1/cats', catRouter)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleWare)
