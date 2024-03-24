@@ -1,8 +1,10 @@
 const path = require('path')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError } = require('../errors')
+const cloudinary = require('cloudinary').v2
+const { unlink } = require('fs').promises
 
-const uploadImage = async (req, res) => {
+const uploadImageToLocalServer = async (req, res) => {
     if (!req.files)
         throw new BadRequestError('No file uploaded!')
 
@@ -25,6 +27,19 @@ const uploadImage = async (req, res) => {
     await catImage.mv(imagePath)
 
     res.status(StatusCodes.OK).json({ image: { src: `/images/${catImage.name}` } })
+}
+
+const uploadImage = async (req, res) => {
+    const catImage = req.files.image
+    const result = await cloudinary.uploader.upload(
+        catImage.tempFilePath,
+        {
+            use_filename: true,
+            folder: 'image-upload-api'
+        }
+    )
+    await unlink(catImage.tempFilePath)
+    res.status(StatusCodes.OK).json({ image: { src: result.secure_url } })
 }
 
 module.exports = uploadImage
