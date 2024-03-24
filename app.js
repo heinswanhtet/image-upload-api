@@ -10,6 +10,9 @@ const cors = require('cors')
 const xss = require('xss-clean')
 const rateLimiter = require('express-rate-limit')
 
+// file uploads
+const fileUpload = require('express-fileupload')
+
 // database
 const connectDB = require('./db/connection')
 
@@ -31,8 +34,9 @@ app.use(helmet())
 app.use(xss())
 app.use(cors())
 
-app.use(express.static('./public/images'))
+app.use(express.static('./public'))
 app.use(express.json())
+app.use(fileUpload())
 
 app.get('/', (req, res) => {
     res.send('Hello World')
