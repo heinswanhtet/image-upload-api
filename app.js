@@ -31,6 +31,7 @@ app.use(helmet())
 app.use(xss())
 app.use(cors())
 
+app.use(express.static('./public/images'))
 app.use(express.json())
 
 app.get('/', (req, res) => {
